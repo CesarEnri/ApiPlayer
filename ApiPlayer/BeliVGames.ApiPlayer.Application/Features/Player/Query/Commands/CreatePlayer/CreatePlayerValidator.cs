@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BeliVGames.ApiPlayer.Application.Contracts.Persistence;
+using BeliVGames.ApiPlayer.Application.Features.Player.Query.Commands.CreatePlayer;
 using FluentValidation;
 
 namespace BeliVGames.ApiPlayer.Application.Features.Player.Query.CreatePlayer;

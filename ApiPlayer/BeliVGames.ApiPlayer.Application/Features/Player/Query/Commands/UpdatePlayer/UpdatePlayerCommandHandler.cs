@@ -6,10 +6,10 @@ namespace BeliVGames.ApiPlayer.Application.Features.Player.Query.UpdatePlayer;
 
 public class UpdatePlayerCommandHandler: IRequestHandler<UpdatePlayerCommand>
 {
-    private readonly IAsyncRepository<Domain.Entities.Player> _playerRepository;
+    private readonly IAsyncRepository<Domain.Entities.Player?> _playerRepository;
     private readonly IMapper _mapper;
 
-    public UpdatePlayerCommandHandler(IAsyncRepository<Domain.Entities.Player> playerRepository, IMapper mapper)
+    public UpdatePlayerCommandHandler(IAsyncRepository<Domain.Entities.Player?> playerRepository, IMapper mapper)
     {
         _playerRepository = playerRepository;
         _mapper = mapper;

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace BeliVGames.ApiPlayer.Application.Features.Player.Query.CreatePlayer;
+namespace BeliVGames.ApiPlayer.Application.Features.Player.Query.Commands.CreatePlayer;
 
 public class CreatePlayerCommand: IRequest<Guid>
 {

@@ -6,10 +6,10 @@ namespace BeliVGames.ApiPlayer.Application.Features.Player.Query.DeletePlayer;
 
 public class DeletePlayerCommandHandler: IRequestHandler<DeletePlayerCommand>
 {
-    private readonly IAsyncRepository<Domain.Entities.Player> _playerRepository;
+    private readonly IAsyncRepository<Domain.Entities.Player?> _playerRepository;
     private readonly IMapper _mapper;
     
-    public DeletePlayerCommandHandler(IAsyncRepository<Domain.Entities.Player> playerRepository, IMapper mapper)
+    public DeletePlayerCommandHandler(IAsyncRepository<Domain.Entities.Player?> playerRepository, IMapper mapper)
     {
         _playerRepository = playerRepository;
         _mapper = mapper;

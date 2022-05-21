@@ -2,7 +2,7 @@
 
 public class AuditableEntity
 {
-    public string Createdby { get; set; }
+    public string CreateBy { get; set; }
     public DateTime CreateDate { get; set; }
     public string? LastModifiedBy { get; set; }
     public DateTime? LastModifiedDate { get; set; }

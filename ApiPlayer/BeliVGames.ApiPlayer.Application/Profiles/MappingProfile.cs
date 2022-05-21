@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BeliVGames.ApiPlayer.Application.Features.Player.Query.Commands.CreatePlayer;
 using BeliVGames.ApiPlayer.Application.Features.Player.Query.CreatePlayer;
 using BeliVGames.ApiPlayer.Application.Features.Player.Query.DeletePlayer;
 using BeliVGames.ApiPlayer.Application.Features.Player.Query.GetPlayerDetail;
