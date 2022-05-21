@@ -1,7 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using BeliVGames.ApiPlayer.Api.Models;
+using BeliVGames.ApiPlayer.Domain.Helpers.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BeliVGames.ApiPlayer.Api.Repository;
@@ -23,7 +25,7 @@ public class JwtManagerRepository: IJwtManagerRepository
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Name, users.Email)                    
+                new(ClaimTypes.Name, users.Email)                    
             }),
             Expires = DateTime.UtcNow.AddMinutes(10),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),SecurityAlgorithms.HmacSha256Signature)
@@ -32,13 +34,36 @@ public class JwtManagerRepository: IJwtManagerRepository
         return new Tokens { Token = tokenHandler.WriteToken(token) };
     }
 
-    public Tokens GenerateRefreshToken(string userName)
+    public string GenerateRefreshToken(string userName)
     {
-        throw new NotImplementedException();
+        var randomNumber = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
     }
 
     public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
-        throw new NotImplementedException();
+        var key = Encoding.UTF8.GetBytes(_iConfiguration["JWT:Key"]!);
+
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ClockSkew = TimeSpan.Zero
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
+        if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new SecurityTokenException("Invalid token");
+        }
+
+
+        return principal;
     }
 }

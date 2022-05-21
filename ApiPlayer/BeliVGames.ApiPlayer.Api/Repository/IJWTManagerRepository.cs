@@ -1,11 +1,12 @@
 ﻿using BeliVGames.ApiPlayer.Api.Models;
 using System.Security.Claims;
+using BeliVGames.ApiPlayer.Domain.Helpers.Models;
 
 namespace BeliVGames.ApiPlayer.Api.Repository;
 
 public interface IJwtManagerRepository
 {
     Tokens Authenticate(LoginModel users);
-    Tokens GenerateRefreshToken(string userName);
+    string GenerateRefreshToken(string userName);
     ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
 }

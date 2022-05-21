@@ -1,4 +1,4 @@
-﻿namespace BeliVGames.ApiPlayer.Api.Models;
+﻿namespace BeliVGames.ApiPlayer.Domain.Helpers.Models;
 
 public class Tokens
 {

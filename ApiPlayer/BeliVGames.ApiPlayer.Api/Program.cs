@@ -13,9 +13,16 @@ builder.Services.AddDbContext<BeliVGamesSqlServerDbContext>(options =>
     options.UseSqlServer(connectionString!));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<BeliVGamesSqlServerDbContext>();
-builder.Services.AddRazorPages();
+ // builder.Services.AddIdentityCore<IdentityUser>() //(options => options.SignIn.RequireConfirmedAccount = false)//Por ahora
+ //     .AddRoles<IdentityRole>()
+ //     .AddEntityFrameworkStores<BeliVGamesSqlServerDbContext>();
+//builder.Services.AddRazorPages();
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    // services.AddDefaultIdentity<IdentityUser>()
+    .AddEntityFrameworkStores<BeliVGamesSqlServerDbContext>()
+    .AddDefaultTokenProviders();
+
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -78,6 +85,10 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
 
 builder.Services.AddControllers();
@@ -104,5 +115,12 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+
+
 
 app.Run();

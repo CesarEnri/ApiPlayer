@@ -1,10 +1,11 @@
 ﻿using BeliVGames.ApiPlayer.Api.Models;
 using BeliVGames.ApiPlayer.Domain.Common;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeliVGames.ApiPlayer.Persistence;
 
-public class BeliVGamesSqlServerDbContext: DbContext
+public class BeliVGamesSqlServerDbContext: IdentityDbContext
 {
     public BeliVGamesSqlServerDbContext(DbContextOptions<BeliVGamesSqlServerDbContext> options)
         : base(options)
@@ -15,6 +16,7 @@ public class BeliVGamesSqlServerDbContext: DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
