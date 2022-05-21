@@ -3,6 +3,7 @@ using BeliVGames.ApiPlayer.Api.Models;
 using BeliVGames.ApiPlayer.Api.Repository;
 using BeliVGames.ApiPlayer.Domain.Helpers.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

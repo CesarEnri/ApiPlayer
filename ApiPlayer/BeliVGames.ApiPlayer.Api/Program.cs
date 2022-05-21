@@ -85,6 +85,15 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "OriginsApp",
+        policy =>
+        {
+            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        });
+});
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAutoMapper(typeof(Program));
@@ -112,6 +121,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseCors("OriginsApp");
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -121,6 +131,10 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
+// app.UseCors(x=>x
+//     .AllowAnyOrigin()
+//     .AllowAnyMethod()
+//     .AllowAnyHeader());
 
 
 app.Run();

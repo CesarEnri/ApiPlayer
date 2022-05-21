@@ -85,6 +85,9 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+import swal from "sweetalert";
+
   export default {
     data() {
       return {
@@ -97,7 +100,26 @@
     },
     methods: {
       onSubmit() {
-        // this will be called only after form is valid. You can do api call here to login
+        axios
+        .post(
+          "https://localhost:7034/api/Account/login",
+          this.model
+        )
+        .then((result) => {      
+          swal(
+            "Login Exitoso",
+            "¡Completado el login",
+            "success"
+          );
+          //this.$router.go('http://localhost:8080/#/dashboard');
+          window.location.href = 'http://localhost:8080/#/dashboard';
+        }).catch((res)=>{
+          swal(
+            "Usuario Incorrecto",
+            "¡El correo o clave son incorrectos",
+            "error"
+          );
+        });
       }
     }
   };
