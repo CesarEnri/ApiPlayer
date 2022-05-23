@@ -1,13 +1,9 @@
-﻿using AutoMapper;
-using BeliVGames.ApiPlayer.Api.Repository;
-using BeliVGames.ApiPlayer.Application.Contracts.Infrastructure;
+﻿using BeliVGames.ApiPlayer.Application.Contracts.Infrastructure;
 using BeliVGames.ApiPlayer.Application.Contracts.Persistence;
 using BeliVGames.ApiPlayer.Application.Features.JwtBearerToken.Commands.CreateJwtBearerToken;
-using BeliVGames.ApiPlayer.Domain.Entities;
 using BeliVGames.ApiPlayer.Domain.Helpers.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +24,6 @@ public class AccountController : ControllerBase
     public AccountController(IJwtManagerRepository jWtManager, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,  RoleManager<IdentityRole> roleManager, IMediator mediator, IJwtBearerTokenRepository jwtBearerTokenRepository)
     {
         _jWtManager = jWtManager;
-        //_userServiceRepository = userServiceRepository;
         _userManager = userManager;
         _signInManager = signInManager;
      
@@ -39,11 +34,10 @@ public class AccountController : ControllerBase
 
 
     [AllowAnonymous]
-    //[HttpPost(Name = "login")]
     [HttpPost]
     [Route("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> LoginAction(LoginModel user)
+    public async Task<IActionResult> LoginAction([FromBody]LoginModel user)
     {
         if (!ModelState.IsValid)
             return NoContent();
@@ -131,20 +125,21 @@ public class AccountController : ControllerBase
     {
         var principal = _jWtManager.GetPrincipalFromExpiredToken(token.Token);
         var username = principal.Identity?.Name;
-
-        //retrieve the saved refresh token from database
-        if (username != null)
-        {
-            var savedRefreshToken = _jwtBearerTokenRepository.GetSavedRefreshTokens(username, token.RefreshToken);
+        
+        if (username == null)
+            return Unauthorized("Invalid token!"); 
+        
+        var savedRefreshToken =_jwtBearerTokenRepository.GetSavedRefreshTokens(username, token.RefreshToken);
             
-            if (savedRefreshToken?.RefreshToken != token.RefreshToken)
-            {
-                return Unauthorized("Invalid attempt!");
-            }
+        if (savedRefreshToken?.RefreshToken == token.RefreshToken)
+        {
+            return Unauthorized("Invalid attempt!");
         }
+
         var newJwtToken = _jWtManager.GenerateRefreshToken(username);
         
         _jwtBearerTokenRepository.DeleteUserRefreshTokens(username, token.RefreshToken);
+        
         var tokenInfo = new CreateJwtBearerTokenCommand
        {
            RefreshToken = newJwtToken,

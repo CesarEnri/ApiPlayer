@@ -25,7 +25,8 @@ public class JwtBearerTokenRepository:BaseRepository<UserRefreshTokens>, IJwtBea
 
     public UserRefreshTokens GetSavedRefreshTokens(string username, string refreshToken)
     {
-        return _db.UserRefreshToken.SingleOrDefault(x => x.UserName == username && x.RefreshToken == refreshToken && x.IsActive == true) ?? throw new InvalidOperationException();
+        return _db.UserRefreshToken.SingleOrDefault(x =>
+            x.UserName == username && x.RefreshToken == refreshToken && x.IsActive == true)!;
     }
 
     public void DeleteUserRefreshTokens(string username, string refreshToken)
@@ -35,5 +36,7 @@ public class JwtBearerTokenRepository:BaseRepository<UserRefreshTokens>, IJwtBea
         {
             _db.UserRefreshToken.Remove(item);
         }
+
+        _db.SaveChanges();
     }
 }
