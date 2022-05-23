@@ -1,4 +1,4 @@
-﻿using BeliVGames.ApiPlayer.Api.Models;
+﻿using BeliVGames.ApiPlayer.Domain.Entities;
 using BeliVGames.ApiPlayer.Domain.Helpers.Models;
 using BeliVGames.ApiPlayer.Persistence;
 using Microsoft.AspNetCore.Identity;

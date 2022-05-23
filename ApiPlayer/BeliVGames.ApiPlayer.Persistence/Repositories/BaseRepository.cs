@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeliVGames.ApiPlayer.Persistence.Repositories
 {
-    public sealed class BaseRepository<T> : IAsyncRepository<T> where T : class
+    public class BaseRepository<T> : IAsyncRepository<T> where T : class
     {
         private readonly BeliVGamesSqlServerDbContext _dbContext;
 

@@ -51,8 +51,18 @@
                               placeholder="Name"
                               name="Name"
                               :rules="{required: true}"
-                              v-model="model.name">
+                              v-model="model.firstName">
                   </base-input>
+
+                <base-input alternative
+                              class="mb-3"
+                              prepend-icon="ni ni-hat-3"
+                              placeholder="LastName"
+                              name="LastName"
+                              :rules="{required: true}"
+                              v-model="model.lastName">
+                  </base-input>
+
 
                   <base-input alternative
                               class="mb-3"
@@ -71,6 +81,16 @@
                               name="Password"
                               :rules="{required: true, min: 6}"
                               v-model="model.password">
+                  </base-input>
+
+                  <base-input alternative
+                              class="mb-3"
+                              prepend-icon="ni ni-lock-circle-open"
+                              placeholder="confirm password"
+                              type="password"
+                              name="Password"
+                              :rules="{required: true, min: 6}"
+                              v-model="model.confirmPassword">
                   </base-input>
                   <div class="text-muted font-italic"><small>password strength: <span
                     class="text-success font-weight-700">strong</span></small></div>
@@ -96,22 +116,43 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+import swal from "sweetalert";
 
-  export default {
-    name: 'register',
+  export default {    
     data() {
       return {
         model: {
-          name: '',
+          firstName: '',
+          lastName: '',
           email: '',
-          password: '',
-          agree: false
+          password: '',   
+          confirmPassword:'',
         }
       }
     },
     methods: {
       onSubmit() {
-        // this will be called only after form is valid. You can do an api call here to register users
+        axios
+        .post(
+          "https://localhost:7034/api/Account/register",
+          this.model
+        )
+        .then((result) => {      
+          swal(
+            "Usuario registrado",
+            "Se ha registrado la cuenta "+ this.model.email,
+            "success"
+          );
+        
+          window.location.href = 'http://localhost:8080/#/login';
+        }).catch((res)=>{
+          swal(
+            "Usuario no registrado",
+            "Favor completar los campos",
+            "error"
+          );
+        });
       }
     }
 

@@ -1,12 +1,19 @@
+using System.Reflection;
 using System.Text;
 using BeliVGames.ApiPlayer.Api.Repository;
+using BeliVGames.ApiPlayer.Application;
+using BeliVGames.ApiPlayer.Application.Contracts.Persistence;
+using BeliVGames.ApiPlayer.Application.Profiles;
 using BeliVGames.ApiPlayer.Persistence;
+using BeliVGames.ApiPlayer.Persistence.Repositories;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration; 
 
 var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
 builder.Services.AddDbContext<BeliVGamesSqlServerDbContext>(options =>
@@ -19,10 +26,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //builder.Services.AddRazorPages();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    // services.AddDefaultIdentity<IdentityUser>()
     .AddEntityFrameworkStores<BeliVGamesSqlServerDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddApplicationServices();
+builder.Services.AddPersistenceServices(configuration);
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -109,7 +117,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BeliVGames API");
+    });
+
 }
 else
 {

@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using BeliVGames.ApiPlayer.Api.Models;
 using BeliVGames.ApiPlayer.Domain.Helpers.Models;
 using Microsoft.IdentityModel.Tokens;
 

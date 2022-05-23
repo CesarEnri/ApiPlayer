@@ -1,4 +1,4 @@
-﻿using BeliVGames.ApiPlayer.Api.Models;
+﻿using BeliVGames.ApiPlayer.Domain.Entities;
 using BeliVGames.ApiPlayer.Domain.Helpers.Models;
 
 namespace BeliVGames.ApiPlayer.Api.Repository.User;

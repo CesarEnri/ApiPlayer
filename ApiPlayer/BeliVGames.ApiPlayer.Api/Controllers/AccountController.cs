@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
-using BeliVGames.ApiPlayer.Api.Models;
 using BeliVGames.ApiPlayer.Api.Repository;
+using BeliVGames.ApiPlayer.Application.Features.JwtBearerToken.Commands.CreateJwtBearerToken;
+using BeliVGames.ApiPlayer.Domain.Entities;
 using BeliVGames.ApiPlayer.Domain.Helpers.Models;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +15,9 @@ namespace BeliVGames.ApiPlayer.Api.Controllers;
 [ApiController]
 public class AccountController : ControllerBase
 {
+    private readonly IMediator _mediator;
+    
+    
     private readonly IJwtManagerRepository _jWtManager;
   // private readonly IUserServiceRepository _userServiceRepository;
     
@@ -21,7 +26,7 @@ public class AccountController : ControllerBase
     private readonly SignInManager<IdentityUser> _signInManager;
 
     private readonly RoleManager<IdentityRole> _roleManager;
-    public AccountController(IJwtManagerRepository jWtManager, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IMapper mapper, RoleManager<IdentityRole> roleManager)
+    public AccountController(IJwtManagerRepository jWtManager, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IMapper mapper, RoleManager<IdentityRole> roleManager, IMediator mediator)
     {
         _jWtManager = jWtManager;
         //_userServiceRepository = userServiceRepository;
@@ -29,13 +34,16 @@ public class AccountController : ControllerBase
         _signInManager = signInManager;
         _mapper = mapper;
         _roleManager = roleManager;
+        _mediator = mediator;
     }
 
 
     [AllowAnonymous]
+    //[HttpPost(Name = "login")]
     [HttpPost]
     [Route("login")]
-    public async Task<IActionResult> Login(LoginModel user)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> LoginAction(LoginModel user)
     {
         if (!ModelState.IsValid)
             return NoContent();
@@ -47,22 +55,21 @@ public class AccountController : ControllerBase
         
         var token = _jWtManager.Authenticate(user);
         
-        var obj = new UserRefreshTokens
-        {               
+        var tokenInfo = new CreateJwtBearerTokenCommand
+        {
             RefreshToken = token.RefreshToken,
             UserName = user.Email
         };
+        await _mediator.Send(tokenInfo);
         
-        //_userServiceRepository.AddUserRefreshTokens(obj);
-        //_userServiceRepository.SaveCommit();
         return Ok(token);
     }
 
     [AllowAnonymous]
     [HttpPost]
-    //[ValidateAntiForgeryToken]
     [Route("register")]
-    public async Task<IActionResult> Register([FromBody]UserRegisterModel userModel)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> RegisterAction(UserRegisterModel userModel)
     {
         if(!ModelState.IsValid)
         {
@@ -87,7 +94,9 @@ public class AccountController : ControllerBase
     
     [HttpPost]
     [Route("creationRole")]
-    public async Task<IActionResult> CreationRole(CreationRoleModel role)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> CreationRoleAction(CreationRoleModel role)
     {
         if (!ModelState.IsValid)
             return NoContent();
@@ -104,18 +113,22 @@ public class AccountController : ControllerBase
 
     }
     
-    [HttpPost] 
+    //[HttpPost(Name = "logout")]
+    [HttpPost]
     [Route("logout")]
-    public async Task<IActionResult> Logout() { 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> LogoutAction() { 
         await _signInManager.SignOutAsync();
         //Eliminar el token de la base de datos
         return Ok();
     }
 
     [AllowAnonymous]
+    //[HttpPost(Name = "refreshToken")]
     [HttpPost]
-    [Route("refresh")]
-    public IActionResult Refresh(Tokens token)
+    [Route("refreshToken")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult RefreshToken(Tokens token)
     {
         var principal = _jWtManager.GetPrincipalFromExpiredToken(token.Token);
         var username = principal.Identity?.Name;
@@ -143,6 +156,14 @@ public class AccountController : ControllerBase
 
         return Ok(newJwtToken);
     }
-    
-    
+
+     //[HttpPost(Name = "saveToken")]
+     [HttpPost]
+     [Route("saveToken")]
+     public async Task<ActionResult<Guid>> SaveTokenUser(CreateJwtBearerTokenCommand createJwtBearerTokenCommand)
+     {
+         var id = await _mediator.Send(createJwtBearerTokenCommand);
+         return Ok();
+     }
+
 }

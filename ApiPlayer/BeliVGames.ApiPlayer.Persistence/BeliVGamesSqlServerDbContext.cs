@@ -1,5 +1,5 @@
-﻿using BeliVGames.ApiPlayer.Api.Models;
-using BeliVGames.ApiPlayer.Domain.Common;
+﻿using BeliVGames.ApiPlayer.Domain.Common;
+using BeliVGames.ApiPlayer.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

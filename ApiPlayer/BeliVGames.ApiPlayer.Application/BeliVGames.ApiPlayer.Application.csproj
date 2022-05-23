@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="Features\JwtBearerToken\Query" />
       <Folder Include="Features\PlayerDetail" />
       <Folder Include="Features\Player\Query\Commands" />
     </ItemGroup>
@@ -16,6 +17,7 @@
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
       <PackageReference Include="FluentValidation" Version="10.3.6" />
       <PackageReference Include="MediatR" Version="10.0.1" />
+      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     </ItemGroup>
 
     <ItemGroup>

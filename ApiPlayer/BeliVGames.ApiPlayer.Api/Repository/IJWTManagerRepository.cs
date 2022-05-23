@@ -1,5 +1,4 @@
-﻿using BeliVGames.ApiPlayer.Api.Models;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using BeliVGames.ApiPlayer.Domain.Helpers.Models;
 
 namespace BeliVGames.ApiPlayer.Api.Repository;
