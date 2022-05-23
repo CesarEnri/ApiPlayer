@@ -1,12 +1,7 @@
-using System.Reflection;
 using System.Text;
-using BeliVGames.ApiPlayer.Api.Repository;
 using BeliVGames.ApiPlayer.Application;
-using BeliVGames.ApiPlayer.Application.Contracts.Persistence;
-using BeliVGames.ApiPlayer.Application.Profiles;
+using BeliVGames.ApiPlayer.Infrastructure;
 using BeliVGames.ApiPlayer.Persistence;
-using BeliVGames.ApiPlayer.Persistence.Repositories;
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +25,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(configuration);
 builder.Services.AddPersistenceServices(configuration);
 
 builder.Services.Configure<IdentityOptions>(options =>
@@ -106,7 +102,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
+//builder.Services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();

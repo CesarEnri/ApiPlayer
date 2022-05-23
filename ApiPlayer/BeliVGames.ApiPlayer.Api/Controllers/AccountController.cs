@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BeliVGames.ApiPlayer.Api.Repository;
+using BeliVGames.ApiPlayer.Application.Contracts.Infrastructure;
+using BeliVGames.ApiPlayer.Application.Contracts.Persistence;
 using BeliVGames.ApiPlayer.Application.Features.JwtBearerToken.Commands.CreateJwtBearerToken;
 using BeliVGames.ApiPlayer.Domain.Entities;
 using BeliVGames.ApiPlayer.Domain.Helpers.Models;
@@ -16,25 +18,23 @@ namespace BeliVGames.ApiPlayer.Api.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly IMediator _mediator;
-    
-    
     private readonly IJwtManagerRepository _jWtManager;
-  // private readonly IUserServiceRepository _userServiceRepository;
+    private readonly IJwtBearerTokenRepository _jwtBearerTokenRepository;
     
-    private readonly IMapper _mapper;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
-
     private readonly RoleManager<IdentityRole> _roleManager;
-    public AccountController(IJwtManagerRepository jWtManager, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IMapper mapper, RoleManager<IdentityRole> roleManager, IMediator mediator)
+    
+    public AccountController(IJwtManagerRepository jWtManager, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,  RoleManager<IdentityRole> roleManager, IMediator mediator, IJwtBearerTokenRepository jwtBearerTokenRepository)
     {
         _jWtManager = jWtManager;
         //_userServiceRepository = userServiceRepository;
         _userManager = userManager;
         _signInManager = signInManager;
-        _mapper = mapper;
+     
         _roleManager = roleManager;
         _mediator = mediator;
+        _jwtBearerTokenRepository = jwtBearerTokenRepository;
     }
 
 
@@ -124,46 +124,35 @@ public class AccountController : ControllerBase
     }
 
     [AllowAnonymous]
-    //[HttpPost(Name = "refreshToken")]
     [HttpPost]
     [Route("refreshToken")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult RefreshToken(Tokens token)
+    public async Task<IActionResult> RefreshToken(Tokens token)
     {
         var principal = _jWtManager.GetPrincipalFromExpiredToken(token.Token);
         var username = principal.Identity?.Name;
 
         //retrieve the saved refresh token from database
-       // var savedRefreshToken = _userServiceRepository.GetSavedRefreshTokens(username, token.RefreshToken);
-
-        //if (savedRefreshToken?.RefreshToken != token.RefreshToken)
-        //{
-        //    return Unauthorized("Invalid attempt!");
-        //}
-
-        var newJwtToken = _jWtManager.GenerateRefreshToken(username);
-
-        // saving refresh token to the db
-        var obj = new UserRefreshTokens
+        if (username != null)
         {
-            RefreshToken = newJwtToken,
-            UserName = username
-        };
-
-      //  _userServiceRepository.DeleteUserRefreshTokens(username, token.RefreshToken);
-       // _userServiceRepository.AddUserRefreshTokens(obj);
-//_userServiceRepository.SaveCommit();
+            var savedRefreshToken = _jwtBearerTokenRepository.GetSavedRefreshTokens(username, token.RefreshToken);
+            
+            if (savedRefreshToken?.RefreshToken != token.RefreshToken)
+            {
+                return Unauthorized("Invalid attempt!");
+            }
+        }
+        var newJwtToken = _jWtManager.GenerateRefreshToken(username);
+        
+        _jwtBearerTokenRepository.DeleteUserRefreshTokens(username, token.RefreshToken);
+        var tokenInfo = new CreateJwtBearerTokenCommand
+       {
+           RefreshToken = newJwtToken,
+           UserName = username
+       };
+       await _mediator.Send(tokenInfo);
 
         return Ok(newJwtToken);
     }
-
-     //[HttpPost(Name = "saveToken")]
-     [HttpPost]
-     [Route("saveToken")]
-     public async Task<ActionResult<Guid>> SaveTokenUser(CreateJwtBearerTokenCommand createJwtBearerTokenCommand)
-     {
-         var id = await _mediator.Send(createJwtBearerTokenCommand);
-         return Ok();
-     }
 
 }

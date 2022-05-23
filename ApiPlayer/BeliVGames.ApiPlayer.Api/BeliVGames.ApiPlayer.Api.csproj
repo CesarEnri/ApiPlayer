@@ -29,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BeliVGames.ApiPlayer.Infrastructure\BeliVGames.ApiPlayer.Infrastructure.csproj" />
       <ProjectReference Include="..\BeliVGames.ApiPlayer.Persistence\BeliVGames.ApiPlayer.Persistence.csproj" />
     </ItemGroup>
 

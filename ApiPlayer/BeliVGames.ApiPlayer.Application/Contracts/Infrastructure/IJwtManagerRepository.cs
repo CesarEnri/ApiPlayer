@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using BeliVGames.ApiPlayer.Domain.Helpers.Models;
 
-namespace BeliVGames.ApiPlayer.Api.Repository;
+namespace BeliVGames.ApiPlayer.Application.Contracts.Infrastructure;
 
 public interface IJwtManagerRepository
 {

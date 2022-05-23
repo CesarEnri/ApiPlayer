@@ -2,10 +2,12 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using BeliVGames.ApiPlayer.Application.Contracts.Infrastructure;
 using BeliVGames.ApiPlayer.Domain.Helpers.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace BeliVGames.ApiPlayer.Api.Repository;
+namespace BeliVGames.ApiPlayer.Infrastructure.JwtBearerToken;
 
 public class JwtManagerRepository: IJwtManagerRepository
 {
@@ -13,7 +15,7 @@ public class JwtManagerRepository: IJwtManagerRepository
     
     public JwtManagerRepository(IConfiguration iConfiguration)
     {
-        this._iConfiguration = iConfiguration;
+        _iConfiguration = iConfiguration;
     }
 
     public Tokens Authenticate(LoginModel users)
@@ -61,7 +63,6 @@ public class JwtManagerRepository: IJwtManagerRepository
         {
             throw new SecurityTokenException("Invalid token");
         }
-
 
         return principal;
     }

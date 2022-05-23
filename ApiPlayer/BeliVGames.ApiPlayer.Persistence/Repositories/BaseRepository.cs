@@ -46,5 +46,10 @@ namespace BeliVGames.ApiPlayer.Persistence.Repositories
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<T?> Get(T condition)
+        {
+            return await _dbContext.Set<T>().FindAsync(condition);
+        }
     }
 }
