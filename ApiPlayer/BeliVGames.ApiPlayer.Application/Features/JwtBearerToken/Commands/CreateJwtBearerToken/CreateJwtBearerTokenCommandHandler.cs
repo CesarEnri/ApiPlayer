@@ -1,20 +1,15 @@
-﻿using AutoMapper;
-using BeliVGames.ApiPlayer.Application.Contracts.Persistence;
-using BeliVGames.ApiPlayer.Application.Profiles;
+﻿using BeliVGames.ApiPlayer.Application.Contracts.Persistence;
 using BeliVGames.ApiPlayer.Domain.Entities;
-using FluentValidation;
 using MediatR;
 
 namespace BeliVGames.ApiPlayer.Application.Features.JwtBearerToken.Commands.CreateJwtBearerToken;
 
 public class CreateJwtBearerTokenCommandHandler:  IRequestHandler<CreateJwtBearerTokenCommand, Guid>
 {
-    private readonly IMapper _mapper;
     private readonly IJwtBearerTokenRepository _jwtBearerTokenRepository;
 
-    public CreateJwtBearerTokenCommandHandler(IMapper mapper, IJwtBearerTokenRepository jwtBearerTokenRepository)
+    public CreateJwtBearerTokenCommandHandler(IJwtBearerTokenRepository jwtBearerTokenRepository)
     {
-        _mapper = mapper;
         _jwtBearerTokenRepository = jwtBearerTokenRepository;
     }
 

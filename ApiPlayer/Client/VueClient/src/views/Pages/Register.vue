@@ -118,6 +118,7 @@
 <script>
 import axios from "axios";
 import swal from "sweetalert";
+import { API_KEY } from '../Maps/API_KEY';
 
   export default {    
     data() {
@@ -133,10 +134,12 @@ import swal from "sweetalert";
     },
     methods: {
       onSubmit() {
+        const userRegister = { firstName: this.model.firstName, lastName: this.model.lastName, email : this.model.email, 
+        password: this.model.password, confirmPassword: this.model.confirmPassword };
         axios
         .post(
-          "https://localhost:7034/api/Account/register",
-          this.model
+          API_KEY+"/Account/register",
+          userRegister
         )
         .then((result) => {      
           swal(

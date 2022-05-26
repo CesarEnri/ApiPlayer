@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeliVGames.ApiPlayer.Persistence.Migrations
 {
     [DbContext(typeof(BeliVGamesSqlServerDbContext))]
-    [Migration("20220522235502_InitialMigration00")]
-    partial class InitialMigration00
+    [Migration("20220523134938_InitialCreation")]
+    partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

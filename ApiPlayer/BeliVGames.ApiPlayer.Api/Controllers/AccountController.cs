@@ -37,6 +37,8 @@ public class AccountController : ControllerBase
     [HttpPost]
     [Route("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> LoginAction([FromBody]LoginModel user)
     {
         if (!ModelState.IsValid)
@@ -48,7 +50,7 @@ public class AccountController : ControllerBase
             return Unauthorized();
         
         var token = _jWtManager.Authenticate(user);
-        
+        ;  
         var tokenInfo = new CreateJwtBearerTokenCommand
         {
             RefreshToken = token.RefreshToken,
@@ -58,12 +60,12 @@ public class AccountController : ControllerBase
         
         return Ok(token);
     }
-
+ 
     [AllowAnonymous]
     [HttpPost]
     [Route("register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> RegisterAction(UserRegisterModel userModel)
+    public async Task<IActionResult> RegisterAction([FromBody]UserRegisterModel userModel)
     {
         if(!ModelState.IsValid)
         {
@@ -90,7 +92,7 @@ public class AccountController : ControllerBase
     [Route("creationRole")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> CreationRoleAction(CreationRoleModel role)
+    public async Task<IActionResult> CreationRoleAction([FromBody]CreationRoleModel role)
     {
         if (!ModelState.IsValid)
             return NoContent();
@@ -121,7 +123,7 @@ public class AccountController : ControllerBase
     [HttpPost]
     [Route("refreshToken")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> RefreshToken(Tokens token)
+    public async Task<IActionResult> RefreshToken([FromBody]Tokens token)
     {
         var principal = _jWtManager.GetPrincipalFromExpiredToken(token.Token);
         var username = principal.Identity?.Name;

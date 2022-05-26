@@ -87,6 +87,8 @@
 <script>
 import axios from "axios";
 import swal from "sweetalert";
+import { mapMutations } from "vuex";
+import { API_KEY } from '../Maps/API_KEY';
 
   export default {
     data() {
@@ -99,19 +101,26 @@ import swal from "sweetalert";
       };
     },
     methods: {
+      ...mapMutations(["setUser", "setToken"]),
       onSubmit() {
+        const userInfo = { email: this.model.email, password: this.model.password, rememberMe : this.model.rememberMe };
         axios
         .post(
-          "https://localhost:7034/api/Account/login",
-          this.model
-        )
+          API_KEY+"/Account/login",
+          userInfo)  
         .then((result) => {      
           swal(
             "Login Exitoso",
             "¡Completado el login",
             "success"
           );
+          console.log(result);
           //this.$router.go('http://localhost:8080/#/dashboard');
+          //const { user, token } = result.json();
+          //this.setUser(user);
+          //this.setToken(result.data.token);
+          this.axios.defaults.headers.common['Authorization'] = 'Bearer ' + result.data.token;
+          
           window.location.href = 'http://localhost:8080/#/dashboard';
         }).catch((res)=>{
           swal(

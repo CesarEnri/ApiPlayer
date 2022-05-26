@@ -1,6 +1,6 @@
 <template>
-  <div>
 
+  <div>
     <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-success">
       <!-- Card stats -->
       <b-row>
@@ -148,6 +148,9 @@
   // Tables
   import SocialTrafficTable from './Dashboard/SocialTrafficTable';
   import PageVisitsTable from './Dashboard/PageVisitsTable';
+  
+  //Token
+  import { mapGetters } from "vuex";
 
   export default {
     components: {
@@ -203,6 +206,9 @@
         this.bigLineChart.chartData = chartData;
         this.bigLineChart.activeIndex = index;
       }
+    },
+     computed: {
+    ...mapGetters(["isLoggedIn"])
     },
     mounted() {
       this.initBigChart(0);

@@ -1,6 +1,5 @@
 ﻿using BeliVGames.ApiPlayer.Application.Contracts.Persistence;
 using FluentValidation;
-using MediatR;
 
 namespace BeliVGames.ApiPlayer.Application.Features.JwtBearerToken.Commands.CreateJwtBearerToken;
 
