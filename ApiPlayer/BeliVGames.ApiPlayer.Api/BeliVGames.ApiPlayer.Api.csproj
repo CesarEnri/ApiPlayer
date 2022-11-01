@@ -29,4 +29,8 @@
       <ProjectReference Include="..\BeliVGames.ApiPlayer.Persistence\BeliVGames.ApiPlayer.Persistence.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="webapp\" />
+    </ItemGroup>
+
 </Project>
