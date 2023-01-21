@@ -18,7 +18,7 @@ public class GetJwtTokenQueryHandler:IRequestHandler<GetJwtTokenDetailQuery, Jwt
 
     public async Task<JwtTokenListVm> Handle(GetJwtTokenDetailQuery request, CancellationToken cancellationToken)
     {
-        var jwtToken = (await _repository.ListAllAsync()).Where(x => x.UserName == request.UserName).MinBy(x => x.CreateDate);
+        var jwtToken = (await _repository.ListAllAsync()).Where(x => x.UserName == request.UserName).MinBy(x => x.CreateAt);
         return _mapper.Map<JwtTokenListVm>(jwtToken);
     }
 }

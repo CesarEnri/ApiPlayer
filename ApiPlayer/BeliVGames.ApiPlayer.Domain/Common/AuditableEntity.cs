@@ -2,13 +2,18 @@
 
 public class AuditableEntity
 {
+    public Guid Id { get; set; }
+    
     protected AuditableEntity()
     {
-        CreateDate = DateTime.Now;
+        CreateAt = DateTime.Now;
     }
 
-    public string? CreateBy { get; set; }
-    public DateTime CreateDate { get; set; }
-    public string? LastModifiedBy { get; set; }
-    public DateTime? LastModifiedDate { get; set; }
+
+    public bool Active { get; set; }
+    public DateTime CreateAt{ get; set; }
+    public Guid CreateBy { get; set; }
+    
+    public DateTime? UpdateAt { get; set; }
+    public Guid? UpdateBy { get; set; }
 }

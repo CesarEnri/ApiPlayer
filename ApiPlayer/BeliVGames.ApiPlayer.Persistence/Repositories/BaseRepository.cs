@@ -1,13 +1,14 @@
 ﻿using BeliVGames.ApiPlayer.Application.Contracts.Persistence;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace BeliVGames.ApiPlayer.Persistence.Repositories
 {
     public class BaseRepository<T> : IAsyncRepository<T> where T : class
     {
-        private readonly BeliVGamesSqlServerDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        public BaseRepository(BeliVGamesSqlServerDbContext dbContext)
+        public BaseRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }

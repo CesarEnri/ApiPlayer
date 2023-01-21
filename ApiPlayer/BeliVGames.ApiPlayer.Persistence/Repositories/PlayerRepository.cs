@@ -6,7 +6,7 @@ namespace BeliVGames.ApiPlayer.Persistence.Repositories;
 
 public class PlayerRepository:BaseRepository<Player>, IPlayerRepository
 {
-    public PlayerRepository(BeliVGamesSqlServerDbContext dbContext) : base(dbContext)
+    public PlayerRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
     }
 

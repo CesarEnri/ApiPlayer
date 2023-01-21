@@ -1,7 +1,4 @@
-﻿using BeliVGames.ApiPlayer.Application.Contracts.Infrastructure;
-using BeliVGames.ApiPlayer.Application.Contracts.Persistence;
-using BeliVGames.ApiPlayer.Infrastructure.JwtBearerToken;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BeliVGames.ApiPlayer.Infrastructure;
@@ -15,6 +12,6 @@ public static class InfrastructureServiceRegistration
 
         //services.AddTransient<IEmailService, EmailService>();
         //services.AddTransient<ICsvExporter, CsvExporter>();
-        services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
+        //services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
     }
 }
