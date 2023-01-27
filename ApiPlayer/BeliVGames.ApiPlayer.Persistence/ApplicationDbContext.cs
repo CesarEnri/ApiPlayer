@@ -2,6 +2,7 @@
 using BeliVGames.ApiPlayer.Domain.Entities;
 using BeliVGames.ApiPlayer.Domain.Entities.Desconido;
 using BeliVGames.ApiPlayer.Domain.Entities.Inventory;
+using BeliVGames.ApiPlayer.Domain.Entities.System;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeliVGames.ApiPlayer.Persistence;
